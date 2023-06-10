@@ -1,0 +1,73 @@
+env: 
+#  ENCRYPTED
+    CREDENTIALS: ""
+    USER_NAME: c3eru
+    USER_EMAIL: yyprjkt@gmail.com
+    BUILD_USER: builder
+    BUILD_HOST: mobx-ci-task
+    TG_TOKEN: ""
+    TG_CHAT_ID: ""
+    
+#  CIRRUS CONFIG
+    CIRRUS_CLONE_DEPTH: 1
+    CIRRUS_WORKING_DIR: /tmp/cirrus-ci-build
+       
+task:
+  name: "Kernel deploy..."
+  timeout_in: 2h
+  container:
+      image: anggit86/ubuntu:22.04
+      cpu: 8
+      memory: 32G
+ 
+  Environment_script:
+      - export DEBIAN_FRONTEND=noninteractive
+      - apt-get update -qqy -y
+      - apt-get install --no-install-recommends -y
+      - apt-get install bc -y
+      - apt-get install bison -y
+      - apt-get install curl -y
+      - apt-get install ccache -y
+      - apt-get install ca-certificates -y
+      - apt-get install flex -y
+      - apt-get install gcc -y
+      - apt-get install git -y
+      - apt-get install glibc-doc -y
+      - apt-get install git-lfs -y
+      - apt-get install gnupg -y
+      - apt-get install jq -y
+      - apt-get install libxml2 -y
+      - apt-get install libtinfo5 -y
+      - apt-get install libc6-dev -y
+      - apt-get install libssl-dev -y
+      - apt-get install libstdc++6 -y
+      - apt-get install make -y
+      - apt-get install openssl -y
+      - apt-get install python2 -y
+      - apt-get install rclone -y
+      - apt-get install ssh -y
+      - apt-get install tar -y
+      - apt-get install tzdata -y
+      - apt-get install wget -y
+      - apt-get install zip -y
+      - apt-get autoremove -qqy  -y
+      - apt-get autoclean -qqy -y
+      - rm -rf /var/lib/apt/lists/*
+      - cat /etc/os*
+      - env
+      - git config --global user.name "$USER_NAME"
+      - git config --global user.email "$USER_EMAIL"
+      - git config --global user.email "yyprjkt@gmail.com"
+      - echo "$CREDENTIALS" > ~/.git-credentials
+      - git config --global credential.helper store --file=~/.git-credentials
+      - export TZ=Asia/Jakarta
+ 
+  Sync_script:
+      - ./sync.sh
+
+  Clang-Proton_script:
+      - ./gf-compile.sh
+
+  
+
+# 
